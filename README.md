@@ -22,13 +22,39 @@ Esta aplicação é uma API de autenticação para gerenciamento de usuários co
 
 ## Estrutura do Projeto
 
-- `configs`: Configurações de segurança e criptografia.
-- `controllers`: Endpoints da API para autenticação e gerenciamento de usuários.
-- `dto`: Data Transfer Objects para validação e transporte de dados entre camadas.
-- `entity`: Entidades JPA para o mapeamento do banco de dados.
-- `repositories`: Repositórios JPA para operações com o banco de dados.
-- `services`: Regras de negócios, gerenciamento de usuários, emails e tokens.
-- `utils`: Operações com JWT.
+```plaintext
+login_app/
+├── .mvn/                       # Pasta do Maven (configurações do Maven)
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── dev/
+│   │   │       └── mspilari/
+│   │   │           └── login_app/
+│   │   │               ├── configs/           # Configurações de segurança, autenticação, etc.
+│   │   │               ├── domains/           # Domínios principais da aplicação
+│   │   │               │   ├── email/         # Lógica relacionada a email
+│   │   │               │   └── user/          # Lógica relacionada ao usuário
+│   │   │               ├── exceptions/        # Exceções personalizadas e tratamento de erros
+│   │   │               └── utils/             # Utilitários e helpers
+│   │   └── resources/                         # Recursos (ex: arquivos de configuração)
+│   └── test/                                  # Testes da aplicação
+├── target/                                    # Pasta de compilação gerada pelo Maven
+├── .gitattributes                             # Configurações de atributos Git
+├── .gitignore                                 # Arquivo para ignorar arquivos no Git
+├── docker-compose.yaml                        # Configuração Docker Compose
+├── HELP.md                                    # Documentação de ajuda do projeto
+├── mvnw                                       # Script Maven Wrapper para Linux
+├── mvnw.cmd                                   # Script Maven Wrapper para Windows
+└── pom.xml                                    # Arquivo de configuração Maven
+```
+
+### Descrição das Pastas Principais
+
+- **`configs/`**: Contém configurações do projeto, provavelmente relacionadas à segurança (ex.: JWT, autenticação).
+- **`domains/`**: Estrutura de domínio da aplicação, onde estão as classes e lógicas específicas para `email` e `user` (usuário).
+- **`exceptions/`**: Contém classes para tratamento de exceções personalizadas, melhorando o controle de erros.
+- **`utils/`**: Utilitários gerais que auxiliam em diversas funcionalidades.
 
 ## Pré-requisitos
 
@@ -82,7 +108,7 @@ token.expiration.seconds=300
 1. Clone o repositório:
 
    ```bash
-   git clone <URL_DO_REPOSITORIO>
+   git clone https://github.com/MSpilari/spring_login.git
    cd login_app
    ```
 
