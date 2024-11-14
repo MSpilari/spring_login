@@ -6,10 +6,10 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import dev.mspilari.login_app.configs.BCryptPasswordConfig;
 import dev.mspilari.login_app.domains.email.services.EmailService;
 import dev.mspilari.login_app.domains.user.entity.UserEntity;
 import dev.mspilari.login_app.domains.user.enums.Role;
@@ -24,13 +24,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final BCryptPasswordConfig passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     private final JwtActions jwtActions;
 
     private final EmailService emailService;
 
-    public UserService(UserRepository userRepository, BCryptPasswordConfig passwordEncoder, JwtActions jwtActions,
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtActions jwtActions,
             EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -44,12 +44,10 @@ public class UserService {
 
     private boolean verifyPassword(String rawPassword, String encodedPassword) {
 
-        return passwordEncoder.bPasswordEncoder().matches(rawPassword, encodedPassword);
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     private void sendPasswordResetEmail(String email, String token) {
-        // Exemplo de envio de e-mail, o link pode ser:
-        // https://seusite.com/reset?token={token}
         String subject = "Password Reset Request";
         String resetUrl = "https://seusite.com/reset?token=" + token;
         String body = "Click the link to reset your password: " + resetUrl;
@@ -64,7 +62,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists !");
         }
 
-        var encodedPassword = passwordEncoder.bPasswordEncoder().encode(password);
+        var encodedPassword = passwordEncoder.encode(password);
 
         var newUser = new UserEntity(email, encodedPassword, Role.CLIENT);
 
@@ -105,7 +103,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token expired");
         }
 
-        user.setPassword(passwordEncoder.bPasswordEncoder().encode(password));
+        user.setPassword(passwordEncoder.encode(password));
 
         user.withResetToken(null, null);
 
